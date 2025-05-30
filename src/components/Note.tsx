@@ -13,7 +13,7 @@ import {
 import { Trash2, Pen } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import type { note } from '../types/note';
+import type { note } from '../../types/note';
 
 interface NoteProps {
   note: note;
