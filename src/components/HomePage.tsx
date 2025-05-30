@@ -1,10 +1,11 @@
 import { AppBar, Container, Grid, Toolbar, Typography } from '@mui/material';
 import { Search as SearchIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import Note from './Note';
+
 import AddNote from './AddNote';
 import useNotes from '../hooks/useNotes';
 import { Search, SearchIconWrapper, StyledInputBase } from '../constants/searchStyles';
+import NoteList from './NoteList';
 
 function Home() {
   const { notes, addNote, editNote, deleteNote } = useNotes();
@@ -41,11 +42,7 @@ function Home() {
           <AddNote onAdd={newNote => addNote(newNote)} />
         </Grid>
 
-        {filteredNotes.map((note, i) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={note.id}>
-            <Note note={note} index={i} handleEdit={editNote} handleDelete={deleteNote} />
-          </Grid>
-        ))}
+        <NoteList notes={filteredNotes} editNote={editNote} deleteNote={deleteNote} />
       </Grid>
     </Container>
   );

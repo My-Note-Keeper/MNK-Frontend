@@ -12,11 +12,11 @@ import {
   Box,
 } from '@mui/material';
 import { Plus } from 'lucide-react';
-import type { note } from '../../types/note';
 import { useState } from 'react';
+import type { INote } from '../types/NoteType';
 
 interface AddNoteProps {
-  onAdd: (newNote: note) => void;
+  onAdd: (newNote: INote) => void;
 }
 
 const AddNote = ({ onAdd }: AddNoteProps) => {
@@ -25,7 +25,7 @@ const AddNote = ({ onAdd }: AddNoteProps) => {
   const [content, setContent] = useState('');
 
   const handleAdd = () => {
-    const newNote: note = {
+    const newNote: INote = {
       id: Date.now().toString(), // simple unique ID
       title,
       content,
