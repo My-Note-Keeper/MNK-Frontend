@@ -1,12 +1,12 @@
 // services/Note.ts
 
-import type { note } from '../types/note';
+import type { INote } from '../types/NoteType';
 
 class NoteService {
   private baseUrl = 'http://localhost:5000/notes';
 
   // GET /notes
-  async getAll(): Promise<note[]> {
+  async getAll(): Promise<INote[]> {
     const res = await fetch(this.baseUrl);
     if (!res.ok) throw new Error('Failed to fetch notes');
 
@@ -23,7 +23,7 @@ class NoteService {
   }
 
   // POST /notes
-  async create(note: Omit<note, 'id' | 'createdAt'>): Promise<note> {
+  async create(note: Omit<INote, 'id' | 'createdAt'>): Promise<INote> {
     const res = await fetch(this.baseUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -41,7 +41,7 @@ class NoteService {
   }
 
   // PUT /notes/:id
-  async update(id: string, updatedNote: Partial<note>): Promise<note> {
+  async update(id: string, updatedNote: Partial<INote>): Promise<INote> {
     const res = await fetch(`${this.baseUrl}/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },

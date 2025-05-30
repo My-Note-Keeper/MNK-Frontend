@@ -13,12 +13,13 @@ import {
 import { Trash2, Pen } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import type { note } from '../types/note';
+import type { INote } from '../types/NoteType';
+
 
 interface NoteProps {
-  note: note;
+  note: INote;
   index: number;
-  handleEdit: (note: note) => void;
+  handleEdit: (note: INote) => void;
   handleDelete: (id: string) => void;
 }
 
@@ -29,7 +30,7 @@ const Note = ({ note, index, handleEdit, handleDelete }: NoteProps) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [randomColor, setRandomColor] = useState('');
-  const [editData, setEditData] = useState<note>(note);
+  const [editData, setEditData] = useState<INote>(note);
 
   useEffect(() => {
     const color = colors[Math.floor(Math.random() * colors.length)];
