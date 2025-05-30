@@ -1,4 +1,13 @@
-import { alpha, AppBar, Box, Grid, InputBase, styled, Toolbar, Typography } from '@mui/material';
+import {
+  alpha,
+  AppBar,
+  Container,
+  Grid,
+  InputBase,
+  styled,
+  Toolbar,
+  Typography,
+} from '@mui/material';
 import './App.css';
 import { Search as SearchIcon } from 'lucide-react';
 import Note from '../components/Note';
@@ -80,7 +89,7 @@ const notes: note[] = [
 
 function App() {
   return (
-    <Box>
+    <Container maxWidth="xl">
       <AppBar position="fixed" color="primary">
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h6">My Note Keeper</Typography>
@@ -92,14 +101,14 @@ function App() {
           </Search>
         </Toolbar>
       </AppBar>
-      <Grid container>
-        {notes.map(note => (
+      <Grid container spacing={4}>
+        {notes.map((note, i) => (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={note.id}>
-           <Note note={note} />
+            <Note note={note} index={i} />
           </Grid>
         ))}
       </Grid>
-    </Box>
+    </Container>
   );
 }
 
