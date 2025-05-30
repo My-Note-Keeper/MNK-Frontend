@@ -19,7 +19,7 @@ interface NoteProps {
   note: note;
   index: number;
   handleEdit: (note: note) => void;
-  handleDelete: (id: number) => void;
+  handleDelete: (id: string) => void;
 }
 
 const colors = ['#fde68a', '#fca5a5', '#a5b4fc', '#6ee7b7', '#f9a8d4', '#c4b5fd', '#fdba74'];

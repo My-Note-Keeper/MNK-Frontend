@@ -26,7 +26,7 @@ const AddNote = ({ onAdd }: AddNoteProps) => {
 
   const handleAdd = () => {
     const newNote: note = {
-      id: Date.now(), // simple unique ID
+      id: Date.now().toString(), // simple unique ID
       title,
       content,
       createdAt: new Date().toLocaleDateString(),

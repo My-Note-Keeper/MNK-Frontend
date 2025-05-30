@@ -12,9 +12,9 @@ import './App.css';
 import { Search as SearchIcon } from 'lucide-react';
 import Note from '../components/Note';
 import type { note } from '../types/note';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AddNote from '../components/AddNote';
-
+import NoteAPI from '../services/Note';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -58,41 +58,22 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function App() {
-  const [notes, setNotes] = useState<note[]>([
-    {
-      id: 1,
-      title: 'Note 1',
-      content: 'This is note 1',
-      createdAt: new Date().toLocaleDateString(),
-    },
-    {
-      id: 2,
-      title: 'Note 2',
-      content: 'This is note 2',
-      createdAt: new Date().toLocaleDateString(),
-    },
-    {
-      id: 3,
-      title: 'Note 3',
-      content: 'This is note 3',
-      createdAt: new Date().toLocaleDateString(),
-    },
-    {
-      id: 4,
-      title: 'Note 4',
-      content: 'This is note 4',
-      createdAt: new Date().toLocaleDateString(),
-    },
-    {
-      id: 5,
-      title: 'Note 5',
-      content: 'This is note 5',
-      createdAt: new Date().toLocaleDateString(),
-    },
-  ]);
+  const [notes, setNotes] = useState<note[]>([]);
   const [filteredNotes, setFilteredNotes] = useState<note[]>(notes);
 
-  const handleDeleteNote = (id: number) => {
+  useEffect(() => {
+    const fetchNotes = async () => {
+      const data = await NoteAPI.getAll();
+      setNotes(data);
+    };
+    fetchNotes();
+  }, []);
+
+  useEffect(() => {
+    setFilteredNotes(notes);
+  }, [notes]);
+
+  const handleDeleteNote = (id: string) => {
     //TODO: Here where we will delete the note from the db
     const newNotes = notes.filter(note => note.id !== id);
     setNotes(newNotes);
@@ -114,6 +95,19 @@ function App() {
     }
   };
 
+  const createNote = async (noteData: { title: string; content: string }) => {
+    try {
+      const newNote = await NoteAPI.create(noteData);
+      setNotes(prev => [newNote, ...prev]);
+    } catch (err) {
+      console.error('Failed to create note:', err);
+    }
+  };
+
+  const handleAddNote = (newNote: note) => {
+    createNote(newNote);
+  };
+
   return (
     <Container maxWidth="xl">
       <AppBar position="fixed" color="primary">
@@ -129,7 +123,7 @@ function App() {
       </AppBar>
       <Grid container spacing={3} sx={{ mt: 15 }}>
         <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-          <AddNote onAdd={newNote => setNotes(prev => [newNote, ...prev])} />
+          <AddNote onAdd={newNote => handleAddNote(newNote)} />
         </Grid>
 
         {filteredNotes.map((note, i) => (
