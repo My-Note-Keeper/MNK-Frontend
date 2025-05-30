@@ -127,7 +127,7 @@ function App() {
 
   return (
     <Container maxWidth="xl">
-      <AppBar position="fixed" color="primary">
+      <AppBar position="fixed" color="primary" sx={{ borderTopLeftRadius:0, borderTopRightRadius: 0}}>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h6">My Note Keeper</Typography>
           <Search onChange={handleSearch}>
