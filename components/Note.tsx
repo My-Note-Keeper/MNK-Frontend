@@ -18,29 +18,32 @@ import type { note } from '../types/note';
 interface NoteProps {
   note: note;
   index: number;
+  handleEdit: (note: note) => void;
+  handleDelete: (id: number) => void;
 }
 
 const colors = ['#fde68a', '#fca5a5', '#a5b4fc', '#6ee7b7', '#f9a8d4', '#c4b5fd', '#fdba74'];
 
-const Note = ({ note, index }: NoteProps) => {
+const Note = ({ note, index, handleEdit, handleDelete }: NoteProps) => {
   const [hovered, setHovered] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [randomColor, setRandomColor] = useState('');
-  const [editData, setEditData] = useState({ title: note.title, content: note.content });
+  const [editData, setEditData] = useState<note>(note);
 
   useEffect(() => {
     const color = colors[Math.floor(Math.random() * colors.length)];
     setRandomColor(color);
   }, []);
 
-  const handleDelete = () => {
-    console.log('Deleting note with ID:', note.id);
+  const handleNoteDelete = () => {
+    handleDelete(note.id);
     setOpenDelete(false);
   };
 
   const handleEditSubmit = () => {
     console.log('Edited note:', editData);
+    handleEdit(editData);
     setOpenEdit(false);
   };
 
@@ -98,7 +101,7 @@ const Note = ({ note, index }: NoteProps) => {
         <DialogContent>Are you sure you want to delete this note?</DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenDelete(false)}>Cancel</Button>
-          <Button color="error" onClick={handleDelete}>
+          <Button color="error" onClick={handleNoteDelete}>
             Delete
           </Button>
         </DialogActions>
@@ -110,16 +113,16 @@ const Note = ({ note, index }: NoteProps) => {
         <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
           <TextField
             label="Title"
-            value={editData.title}
-            onChange={e => setEditData({ ...editData, title: e.target.value })}
+            value={editData?.title}
+            onChange={e => setEditData({ ...editData!, title: e.target.value })}
             fullWidth
           />
           <TextField
             label="Content"
-            value={editData.content}
+            value={editData?.content}
             multiline
             rows={4}
-            onChange={e => setEditData({ ...editData, content: e.target.value })}
+            onChange={e => setEditData({ ...editData!, content: e.target.value })}
             fullWidth
           />
         </DialogContent>

@@ -12,6 +12,8 @@ import './App.css';
 import { Search as SearchIcon } from 'lucide-react';
 import Note from '../components/Note';
 import type { note } from '../types/note';
+import { useState } from 'react';
+
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -54,40 +56,51 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const notes: note[] = [
-  {
-    id: 1,
-    title: 'Note 1',
-    content: 'This is note 1',
-    createdAt: new Date(),
-  },
-  {
-    id: 2,
-    title: 'Note 2',
-    content: 'This is note 2',
-    createdAt: new Date(),
-  },
-  {
-    id: 3,
-    title: 'Note 3',
-    content: 'This is note 3',
-    createdAt: new Date(),
-  },
-  {
-    id: 4,
-    title: 'Note 4',
-    content: 'This is note 4',
-    createdAt: new Date(),
-  },
-  {
-    id: 5,
-    title: 'Note 5',
-    content: 'This is note 5',
-    createdAt: new Date(),
-  },
-];
-
 function App() {
+  const [notes, setNotes] = useState<note[]>([
+    {
+      id: 1,
+      title: 'Note 1',
+      content: 'This is note 1',
+      createdAt: new Date().toLocaleDateString(),
+    },
+    {
+      id: 2,
+      title: 'Note 2',
+      content: 'This is note 2',
+      createdAt: new Date().toLocaleDateString(),
+    },
+    {
+      id: 3,
+      title: 'Note 3',
+      content: 'This is note 3',
+      createdAt: new Date().toLocaleDateString(),
+    },
+    {
+      id: 4,
+      title: 'Note 4',
+      content: 'This is note 4',
+      createdAt: new Date().toLocaleDateString(),
+    },
+    {
+      id: 5,
+      title: 'Note 5',
+      content: 'This is note 5',
+      createdAt: new Date().toLocaleDateString(),
+    },
+  ]);
+
+  const handleDeleteNote = (id: number) => {
+    //TODO: Here where we will delete the note from the db
+    const newNotes = notes.filter(note => note.id !== id);
+    setNotes(newNotes);
+  };
+
+  const handleEditNote = (note: note) => {
+    //TODO: Here where we will edit the note in the db
+    console.log(note, note.id);
+  };
+
   return (
     <Container maxWidth="xl">
       <AppBar position="fixed" color="primary">
@@ -101,10 +114,15 @@ function App() {
           </Search>
         </Toolbar>
       </AppBar>
-      <Grid container spacing={4}>
+      <Grid container spacing={3} sx={{ mt: 15 }}>
         {notes.map((note, i) => (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={note.id}>
-            <Note note={note} index={i} />
+            <Note
+              note={note}
+              index={i}
+              handleEdit={handleEditNote}
+              handleDelete={handleDeleteNote}
+            />
           </Grid>
         ))}
       </Grid>
