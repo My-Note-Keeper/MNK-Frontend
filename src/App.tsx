@@ -13,6 +13,7 @@ import { Search as SearchIcon } from 'lucide-react';
 import Note from '../components/Note';
 import type { note } from '../types/note';
 import { useState } from 'react';
+import AddNote from '../components/AddNote';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -89,6 +90,7 @@ function App() {
       createdAt: new Date().toLocaleDateString(),
     },
   ]);
+  const [filteredNotes, setFilteredNotes] = useState<note[]>(notes);
 
   const handleDeleteNote = (id: number) => {
     //TODO: Here where we will delete the note from the db
@@ -101,12 +103,23 @@ function App() {
     console.log(note, note.id);
   };
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
+    const searchTerm = e.target.value.toLowerCase();
+    if (searchTerm === '') return setFilteredNotes(notes);
+    else {
+      setFilteredNotes(
+        notes.filter(note => note.title.toLowerCase().includes(e.target.value.toLowerCase()))
+      );
+    }
+  };
+
   return (
     <Container maxWidth="xl">
       <AppBar position="fixed" color="primary">
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h6">My Note Keeper</Typography>
-          <Search>
+          <Search onChange={handleSearch}>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -115,7 +128,11 @@ function App() {
         </Toolbar>
       </AppBar>
       <Grid container spacing={3} sx={{ mt: 15 }}>
-        {notes.map((note, i) => (
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+          <AddNote onAdd={newNote => setNotes(prev => [newNote, ...prev])} />
+        </Grid>
+
+        {filteredNotes.map((note, i) => (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={note.id}>
             <Note
               note={note}
