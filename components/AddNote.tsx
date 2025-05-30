@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState } from 'react';
 import {
   IconButton,
   Dialog,
@@ -14,6 +13,7 @@ import {
 } from '@mui/material';
 import { Plus } from 'lucide-react';
 import type { note } from '../types/note';
+import { useState } from 'react';
 
 interface AddNoteProps {
   onAdd: (newNote: note) => void;
