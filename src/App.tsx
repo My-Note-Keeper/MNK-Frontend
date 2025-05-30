@@ -15,6 +15,8 @@ import type { note } from '../types/note';
 import { useEffect, useState } from 'react';
 import AddNote from '../components/AddNote';
 import NoteAPI from '../services/Note';
+import toast from 'react-hot-toast';
+
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -73,15 +75,29 @@ function App() {
     setFilteredNotes(notes);
   }, [notes]);
 
-  const handleDeleteNote = (id: string) => {
-    //TODO: Here where we will delete the note from the db
-    const newNotes = notes.filter(note => note.id !== id);
-    setNotes(newNotes);
+  const handleDeleteNote = async (id: string) => {
+    try {
+      await NoteAPI.delete(id);
+      setNotes(prev => prev.filter(note => note.id !== id));
+      toast.success('Note deleted successfully');
+    } catch (err) {
+      console.error('Failed to delete note:', err);
+      toast.error('Failed deleting note');
+    }
   };
 
-  const handleEditNote = (note: note) => {
-    //TODO: Here where we will edit the note in the db
-    console.log(note, note.id);
+  const handleEditNote = async (updatedNote: note) => {
+    try {
+      const savedNote = await NoteAPI.update(updatedNote.id, {
+        title: updatedNote.title,
+        content: updatedNote.content,
+      });
+      setNotes(prev => prev.map(note => (note.id === savedNote.id ? savedNote : note)));
+      toast.success('Note updated successfully');
+    } catch (err) {
+      console.error('Failed to update note:', err);
+      toast.error('Failed updating note');
+    }
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,17 +111,18 @@ function App() {
     }
   };
 
-  const createNote = async (noteData: { title: string; content: string }) => {
+  const handleAddNote = async (newNote: note) => {
     try {
-      const newNote = await NoteAPI.create(noteData);
-      setNotes(prev => [newNote, ...prev]);
+      const created = await NoteAPI.create({
+        title: newNote.title,
+        content: newNote.content,
+      });
+      setNotes(prev => [created, ...prev]);
+      toast.success('Note created successfully');
     } catch (err) {
       console.error('Failed to create note:', err);
+      toast.error('Failed adding note');
     }
-  };
-
-  const handleAddNote = (newNote: note) => {
-    createNote(newNote);
   };
 
   return (
