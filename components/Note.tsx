@@ -59,6 +59,7 @@ const Note = ({ note, index, handleEdit, handleDelete }: NoteProps) => {
             backgroundColor: randomColor,
             borderRadius: 16,
             padding: 16,
+            height: 132,
           }}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
